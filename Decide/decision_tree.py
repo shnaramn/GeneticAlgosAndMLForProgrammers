@@ -72,6 +72,23 @@ def as_rule_str(tree, label, ident = 0):
     s += '\n'
     return s
 
+# Pruning
+def find_edges(tree, label, X, Y):
+    X.sort()
+    Y.sort()
+    diagonals = [i for i in set(X).intersection(set(Y))]
+    diagonals.sort()
+    L = [classify(tree, label, [d, d]) for d in diagonals]
+    low = L.index(False)
+    min_x = X[low]
+    min_y = Y[low]
+
+    high = L[::-1].index(False)
+    max_x = X[len(X) - 1 - high]
+    max_y = Y[len(Y) - 1 - high]
+
+    return (min_x, min_y), (max_x, max_y)
+
 def test_case_1():
     data = [
         [0, 0, False],
@@ -97,26 +114,20 @@ def test_case_2():
     tree = create_tree(data, label)
     print(as_rule_str(tree, label))
     print(classify(tree, label, [1, 1]))
+    res = find_edges(tree, label, [x for x in data[0]], [y for y in data[1]])
+    print(res)
 
-# Pruning
-def find_edges(tree, label, X, Y):
-    X.sort()
-    Y.sort()
-    diagonals = [i for i in set(X).intersection(set(Y))]
-    diagonals.sort()
-    L = [classify(tree, label, [d, d]) for d in diagonals]
-    low = L.index(False)
-    min_x = X[low]
-    min_y = Y[low]
-
-    high = L[::-1].index(False)
-    max_x = X[len(X) - 1 - high]
-    max_y = Y[len(Y) - 1 - high]
-
-    return (min_x, min_y), (max_x, max_y)
+def test_case_3():
+    with open("../data_rand", "rb") as f:
+        data = pickle.load(f)
+    label = ['x', 'y', 'out']
+    tree = create_tree(data, label)
+    print(as_rule_str(tree, label))
+    res = find_edges(tree, label, [x for x in data[0]], [y for y in data[1]])
+    print(res)
 
 if __name__ == '__main__':
-    test_case_2()
+    test_case_3()
 
 # By using more data with a greater variety of possible features, you're less
 # likely to get a point your tree cannot classify. You'll still have the same
