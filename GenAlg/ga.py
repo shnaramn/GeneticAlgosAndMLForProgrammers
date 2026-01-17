@@ -1,12 +1,7 @@
 import math
 import matplotlib
 import matplotlib.pyplot as plt
-
 import random
-
-# def selection(generation, width):
-#     results = [hit_coordinate(theta, v, width)[1] for (theta, v) in generation]
-#     return cumulative_probabilities(results)
 
 def random_tries(count):
     items = []
